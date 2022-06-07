@@ -1,0 +1,6 @@
+{
+  "tasks": {
+    "dev": "deno run -A --no-check _script/dev.ts",
+    "build": "deno run -A --no-check _script/build.ts"
+  }
+}
