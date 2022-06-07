@@ -1,8 +1,8 @@
 ## Nanojsx Hooks
 
-simple-hook for [nanojsx](https://nanojsx.io)
+Experimental hooks with [nanojsx](https://nanojsx.io)
 
-> This hook is experimental.
+> This is experimental hooks.
 
 ### Hooks
 
@@ -14,10 +14,14 @@ simple-hook for [nanojsx](https://nanojsx.io)
 - useRef
 - useContext
 
-### Development
-
-> livereload support just edit file in src folders.
+### Usage
 
 ```bash
+git clone https://github.com/herudi/nanojsx-hooks.git
+
+cd nanojsx-hooks
+
 deno task dev
 ```
+
+> Hot-reloading support. just edit file in src folders.
