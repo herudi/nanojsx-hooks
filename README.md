@@ -2,7 +2,7 @@
 
 simple-hook for [nanojsx](https://nanojsx.io)
 
-> Don't use it. This hook is experimental.
+> This hook is experimental.
 
 ### Hooks
 
