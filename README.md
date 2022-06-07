@@ -1,8 +1,6 @@
 ## Nanojsx Hooks
 
-Experimental hooks with [nanojsx](https://nanojsx.io)
-
-> This is experimental hooks.
+Experimental hooks with [nanojsx](https://nanojsx.io).
 
 ### Hooks
 
