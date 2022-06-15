@@ -23,3 +23,15 @@ deno task dev
 ```
 
 > Hot-reloading support. just edit file in src folders.
+
+### Build (Node.js)
+
+```bash
+git clone https://github.com/herudi/nanojsx-hooks.git
+
+cd nanojsx-hooks
+
+npm i
+
+npm run build
+```
