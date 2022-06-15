@@ -97,7 +97,7 @@ export const useCallback: Function = (cb: CallableFunction, deps: any[]) =>
   useMemo(() => (p: any) => cb(p), deps);
 
 // useRef
-export const useRef = (current: any) => useMemo(() => ({ current }), []);
+export const useRef = (val?: any) => useMemo(() => ({ current: val }), []);
 
 // createContext
 export const createContext = (init?: any) => {

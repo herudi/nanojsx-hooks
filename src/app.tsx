@@ -1,6 +1,6 @@
 /* @jsx h */
 import { h, render } from "https://deno.land/x/nano_jsx@v0.0.32/mod.ts";
-import { Hooked, useEffect, useState } from "./lib/hook.ts";
+import { Hooked, useEffect, useState } from "./lib/hooks.ts";
 
 function Counter() {
   const [count, setCount] = useState(0);
