@@ -22,3 +22,18 @@ jobs:
 
       - name: Build Packages
         run: npm run build
+        
+      - name: Download nanojsx
+        run: curl https://raw.githubusercontent.com/nanojsx/nano/master/bundles/nano.full.min.js -o lib/nanojsx.min.js
+
+      - name: Prepare Test
+        run: |
+          npm i -D puppeteer@14
+          npx -y gitget nanojsx/nano/scripts/browserTest#v0.0.32  browserTest
+          npx tsc -p browserTest/tsconfig.json
+
+      - name: Test
+        run: node browserTest/index.mjs --coverage
+
+      - name: Coverage
+        run: npx -y nyc report --exclude lib/nanojsx.min.js

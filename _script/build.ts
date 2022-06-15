@@ -9,6 +9,7 @@ try {
     minify: true,
     plugins: [denoPlugin()],
   });
+  Deno.exit(0);
 } catch (error) {
   esbuild.stop();
   Deno.exit(1);
