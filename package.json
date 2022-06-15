@@ -1,0 +1,28 @@
+{
+  "name": "nanojsx-hooks",
+  "version": "0.0.0",
+  "description": "Experimental hooks with [nanojsx](https://nanojsx.io).",
+  "main": "lib/hooks.js",
+  "type": "module",
+  "types": "lib/hooks.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.nodejs.json"
+  },
+  "files": [
+    "lib/*"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/herudi/nanojsx-hooks.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/herudi/nanojsx-hooks/issues"
+  },
+  "homepage": "https://github.com/herudi/nanojsx-hooks#readme",
+  "devDependencies": {
+    "typescript": "^4.7.3"
+  }
+}
