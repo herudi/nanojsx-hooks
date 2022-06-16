@@ -2,6 +2,8 @@
 
 Experimental hooks with [nanojsx](https://nanojsx.io).
 
+[![codecov](https://codecov.io/gh/herudi/nanojsx-hooks/branch/master/graph/badge.svg)](https://codecov.io/gh/herudi/nanojsx-hooks)
+
 ## Hooks
 
 - useState
