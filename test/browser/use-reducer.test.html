@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="/tester.js"></script>
+    <script src="/browserTest/tester.js"></script>
+    <script src="/lib/nanojsx.min.js"></script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script>
+      const { h, render, Component } = nanoJSX;
+      const root = () => document.getElementById("root");
+    </script>
+
+    <script type="module">
+      import { Hooked, useEffect, useReducer } from "/lib/hooks.js";
+
+      const initialTodos = [
+        {
+          id: 1,
+          title: "Todo 1",
+          complete: false,
+        },
+        {
+          id: 2,
+          title: "Todo 2",
+          complete: false,
+        },
+      ];
+
+      const reducer = (state, action) => {
+        switch (action.type) {
+          case "COMPLETE":
+            return state.map((todo) => {
+              if (todo.id === action.id) {
+                return { ...todo, complete: !todo.complete };
+              } else {
+                return todo;
+              }
+            });
+          default:
+            return state;
+        }
+      };
+
+      let checks = [];
+
+      describe("useReducer (checklist app)", async () => {
+        function Todos() {
+          const [todos, dispatch] = useReducer(reducer, initialTodos);
+
+          const handleComplete = (todo) => {
+            dispatch({ type: "COMPLETE", id: todo.id });
+          };
+
+          useEffect(() => {
+            checks = todos.map((o) => o.complete);
+          }, [todos]);
+
+          return h(
+            "div",
+            null,
+            todos.map((todo) =>
+              h(
+                "div",
+                {
+                  key: todo.id,
+                },
+                h(
+                  "label",
+                  null,
+                  h("input", {
+                    id: todo.id,
+                    type: "checkbox",
+                    onChange: () => handleComplete(todo),
+                    ...(todo.complete ? { checked: true } : void 0),
+                  }),
+                  todo.title
+                )
+              )
+            )
+          );
+        }
+
+        Hooked.bind(render)(Todos, root());
+
+        await Test.wait();
+
+        const click1 = async () => {
+          const checkbox = document.getElementById("1");
+          checkbox.click();
+          await Test.wait();
+        };
+        const click2 = async () => {
+          const checkbox = document.getElementById("2");
+          checkbox.click();
+          await Test.wait();
+        };
+
+        await click1();
+        expect(checks.join(",")).toBe(
+          "true,false",
+          "After click checkbox todo 1, checkeds should be (true, false)"
+        );
+
+        await click2();
+        expect(checks.join(",")).toBe(
+          "true,true",
+          "After click checkbox todo 2, checkeds should be (true, true)"
+        );
+      });
+
+      Test.start();
+    </script>
+  </body>
+</html>
