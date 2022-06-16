@@ -17,37 +17,37 @@
     </script>
 
     <script type="module">
-      import { Hooked, useEffect, useState } from "/lib/hooks.js";
+      import { Hooked, useRef } from "/lib/hooks.js";
 
-      let _count = 0;
+      let value = "";
 
-      describe("useEffect and useState", async () => {
-        function Counter() {
-          const [count, setCount] = useState(0);
-
-          useEffect(() => {
-            console.log(count);
-            _count = count;
-          }, [count]);
-
-          return h("div", null, [
+      describe("useRef", async () => {
+        function MyForm() {
+          const inputRef = useRef(null);
+          const bindRef = (ref) => (elem) => (ref.current = elem);
+          const click = () => {
+            value = inputRef.current.value;
+          };
+          return h(
+            "div",
+            null,
+            h("input", {
+              ref: bindRef(inputRef),
+            }),
             h(
               "button",
               {
-                onClick: () => {
-                  console.log("click");
-                  setCount(count + 1);
-                },
+                onClick: click,
               },
-              "Increment"
-            ),
-            h("h1", null, `Counter: ${count}`),
-          ]);
+              "Click Me"
+            )
+          );
         }
-
-        Hooked.bind(render)(Counter, root());
+        Hooked.bind(render)(MyForm, root());
 
         await Test.wait();
+
+        document.querySelector("input").value = "hello nanojsx";
 
         const click = async () => {
           const btn = document.querySelector("button");
@@ -56,13 +56,10 @@
         };
 
         await click();
-        expect(_count).toBe(1, "After one click, counter should be 1");
-
-        await click();
-        expect(_count).toBe(2, "After two click, counter should be 2");
-
-        await click();
-        expect(_count).toBe(3, "After two click, counter should be 3");
+        expect(value).toBe(
+          "hello nanojsx",
+          "After click, value should be (hello nanojsx)"
+        );
       });
 
       Test.start();
