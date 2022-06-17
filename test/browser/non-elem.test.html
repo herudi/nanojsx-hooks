@@ -19,11 +19,11 @@
     <script type="module">
       import { Hooked, useEffect, useMemo } from "/lib/hooks.js";
 
-      let effectStatus = false, memo = "";
+      let effectStatus = false,
+        memo = "";
 
       describe("Non element", async () => {
         function Comp() {
-
           memo = useMemo(() => "hello", []);
 
           useEffect(() => {

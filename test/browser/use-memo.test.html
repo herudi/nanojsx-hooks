@@ -1,71 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="/tester.js"></script>
+    <script src="/browserTest/tester.js"></script>
+    <script src="/lib/nanojsx.min.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Document</title>
-  <script src="/tester.js"></script>
-  <script src="/browserTest/tester.js"></script>
-  <script src="/lib/nanojsx.min.js"></script>
-</head>
+  <body>
+    <div id="root"></div>
+    <script>
+      const { h, render, Component } = nanoJSX;
+      const root = () => document.getElementById("root");
+    </script>
 
-<body>
-  <div id="root"></div>
-  <script>
-    const { h, render, Component } = nanoJSX;
-    const root = () => document.getElementById("root");
-  </script>
+    <script type="module">
+      import { Hooked, useMemo, useState } from "/lib/hooks.js";
 
-  <script type="module">
-    import { Hooked, useMemo, useState } from "/lib/hooks.js";
+      const calcs = [];
 
-    const calcs = [];
+      describe("useMemo", async () => {
+        function calculate(numb) {
+          calcs.push(numb);
+          return 1000 + numb;
+        }
+        function Comp() {
+          const [numb, setNumb] = useState(0);
+          const [count, setCount] = useState(0);
+          const value = useMemo(() => calculate(numb), [numb]);
+          return h(
+            "div",
+            null,
+            h(
+              "button",
+              {
+                id: "count",
+                onClick: () => setCount((p) => p + 1),
+              },
+              "Increment"
+            ),
+            h(
+              "button",
+              {
+                id: "numb",
+                onClick: () => setNumb((p) => p + 1),
+              },
+              "Add Numb"
+            ),
+            h("h1", null, "Numb is ", value),
+            h("h1", null, "Count is ", count)
+          );
+        }
 
-    describe("useMemo", async () => {
-      function calculate(numb) {
-        calcs.push(numb);
-        return 1000 + numb;
-      }
-      function Comp() {
-        const [numb, setNumb] = useState(0);
-        const [count, setCount] = useState(0);
-        const value = useMemo(() => calculate(numb), [numb]);
-        return h("div", null, h("button", {
-          id: "count",
-          onClick: () => setCount((p) => p + 1)
-        }, "Increment"), h("button", {
-          id: "numb",
-          onClick: () => setNumb((p) => p + 1)
-        }, "Add Numb"), h("h1", null, "Numb is ", value), h("h1", null, "Count is ", count));
-      }
+        Hooked.bind(render)(Comp, root());
 
-      Hooked.bind(render)(Comp, root());
-
-      await Test.wait();
-
-      const click1 = async () => {
-        const btn = document.getElementById("numb");
-        btn.click();
         await Test.wait();
-      };
-      const click2 = async () => {
-        const btn = document.getElementById("count");
-        btn.click();
-        await Test.wait();
-      };
 
-      await click1();
-      expect(calcs.length).toBe(2, "After click numb, calcs length should be 2");
+        const click1 = async () => {
+          const btn = document.getElementById("numb");
+          btn.click();
+          await Test.wait();
+        };
+        const click2 = async () => {
+          const btn = document.getElementById("count");
+          btn.click();
+          await Test.wait();
+        };
 
-      await click2();
-      // without useMemo calcs.length = 3
-      expect(calcs.length).toBe(2, "After click count, calcs length should be 2");
-    });
+        await click1();
+        expect(calcs.length).toBe(
+          2,
+          "After click numb, calcs length should be 2"
+        );
 
-    Test.start();
-  </script>
-</body>
+        await click2();
+        // without useMemo calcs.length = 3
+        expect(calcs.length).toBe(
+          2,
+          "After click count, calcs length should be 2"
+        );
+      });
 
+      Test.start();
+    </script>
+  </body>
 </html>
