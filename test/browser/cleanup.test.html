@@ -9,6 +9,7 @@
     <script src="/browserTest/tester.js"></script>
     <script src="/lib/nanojsx.min.js"></script>
   </head>
+
   <body>
     <div id="root"></div>
     <script>
@@ -19,33 +20,40 @@
     <script type="module">
       import { Hooked, useEffect, useState } from "/lib/hooks.js";
 
-      let _count = 0;
-
-      describe("useEffect and useState", async () => {
-        function Counter() {
+      describe("useEffect cleanup", async () => {
+        function Comp() {
           const [count, setCount] = useState(0);
-
+          const [clean, setClean] = useState("no");
           useEffect(() => {
-            console.log(count);
-            _count = count;
-          }, [count]);
+            let status = false;
 
-          return h("div", null, [
+            // asuming abort controller 1s
+            setTimeout(() => {
+              if (status) {
+                setClean("yes");
+              }
+            }, 1000);
+            return () => {
+              status = true;
+            };
+          }, [count]);
+          return h(
+            "div",
+            null,
             h(
               "button",
               {
-                onClick: () => {
-                  console.log("click");
-                  setCount(count + 1);
-                },
+                onClick: () => setCount((p) => p + 1),
               },
-              "Increment"
+              "Click Me"
             ),
-            h("h1", null, `Counter: ${count}`),
-          ]);
+            h("span", null, clean)
+          );
         }
 
-        Hooked.bind(render)(Counter, root());
+        Hooked.bind(render)(Comp, root());
+
+        const sleep = () => new Promise((resolve) => setTimeout(resolve, 1000));
 
         await Test.wait();
 
@@ -56,13 +64,13 @@
         };
 
         await click();
-        expect(_count).toBe(1, "After one click, counter should be 1");
-
         await click();
-        expect(_count).toBe(2, "After two click, counter should be 2");
-
-        await click();
-        expect(_count).toBe(3, "After three click, counter should be 3");
+        await sleep();
+        const span = document.querySelector("span");
+        expect(span.innerText).toBe(
+          "yes",
+          "After cleanup 1s, clean should be yes"
+        );
       });
 
       Test.start();
