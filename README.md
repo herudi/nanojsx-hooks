@@ -24,6 +24,9 @@ npm i nanojsx-hooks
 import { h, render } from "nano-jsx";
 import { Hooked, useEffect, useState } from "nanojsx-hooks";
 
+// deno
+// import { Hooked, useEffect, useState } from "https://deno.land/x/nanojsx_hooks/mod.ts";
+
 function Counter() {
   const [count, setCount] = useState(0);
 
@@ -46,7 +49,11 @@ function Counter() {
   );
 }
 
-Hooked.bind(render)(<Counter />, document.getElementById("app"));
+Hooked.bind(render)(Counter, document.getElementById("app"));
+
+// ssr
+// const str = Hooked.bind(renderSSR)(Counter);
+// console.log(str)
 
 ```
 

@@ -1,69 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <script src="/tester.js"></script>
-    <script src="/browserTest/tester.js"></script>
-    <script src="/lib/nanojsx.min.js"></script>
-  </head>
 
-  <body>
-    <div id="root"></div>
-    <script>
-      const { h, render, Component } = nanoJSX;
-      const root = () => document.getElementById("root");
-    </script>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <script src="/tester.js"></script>
+  <script src="/browserTest/tester.js"></script>
+  <script src="/lib/nanojsx.min.js"></script>
+</head>
 
-    <script type="module">
-      import { Hooked, useCallback, useState, useEffect } from "/lib/hooks.js";
+<body>
+  <div id="root"></div>
+  <script>
+    const { h, render, Component } = nanoJSX;
+    const root = () => document.getElementById("root");
+  </script>
 
-      let value = 0;
+  <script type="module">
+    import { Hooked, useCallback, useState, useEffect } from "/lib/hooks.js";
 
-      describe("useCallback", async () => {
-        function Comp() {
-          const [count, setCount] = useState(0);
+    let value = 0;
 
-          useEffect(() => {
-            value = count;
-          }, [count]);
+    describe("useCallback", async () => {
+      function Comp() {
+        const [count, setCount] = useState(0);
+        
+        useEffect(() => {
+          value = count;
+        }, [count])
 
-          const click = useCallback(() => setCount((p) => p + 1), [count]);
+        const click = useCallback(() => setCount((p) => p + 1), [count]);
 
-          return h(
-            "div",
-            null,
-            h(
-              "button",
-              {
-                onClick: click,
-              },
-              "Increment"
-            ),
-            h("h1", null, "Count is ", count)
-          );
-        }
+        return h("div", null, h("button", {
+          onClick: click
+        }, "Increment"), h("h1", null, "Count is ", count));
+      }
 
-        Hooked.bind(render)(Comp, root());
+      Hooked.bind(render)(Comp, root());
 
+      await Test.wait();
+
+      const click = async () => {
+        const btn = document.querySelector("button");
+        btn.click();
         await Test.wait();
+      };
 
-        const click = async () => {
-          const btn = document.querySelector("button");
-          btn.click();
-          await Test.wait();
-        };
+      await click();
+      expect(value).toBe(1, "After one click, count should be 1");
 
-        await click();
-        expect(value).toBe(1, "After one click, count should be 1");
+      await click();
+      expect(value).toBe(2, "After two click, count should be 2");
+    });
 
-        await click();
-        expect(value).toBe(2, "After two click, count should be 2");
-      });
+    Test.start();
+  </script>
+</body>
 
-      Test.start();
-    </script>
-  </body>
 </html>

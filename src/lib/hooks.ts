@@ -90,7 +90,7 @@ export function useMemo<T>(fn: () => T, deps?: any[]): T {
   const cc = hasChange(id, deps);
   if (cc) hook.mems[id] = fn();
   hook.id++;
-  return hook.mems[id] || fn();
+  return hook.mems[id];
 }
 
 // useCallback

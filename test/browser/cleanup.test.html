@@ -1,79 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <script src="/tester.js"></script>
-    <script src="/browserTest/tester.js"></script>
-    <script src="/lib/nanojsx.min.js"></script>
-  </head>
 
-  <body>
-    <div id="root"></div>
-    <script>
-      const { h, render, Component } = nanoJSX;
-      const root = () => document.getElementById("root");
-    </script>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <script src="/tester.js"></script>
+  <script src="/browserTest/tester.js"></script>
+  <script src="/lib/nanojsx.min.js"></script>
+</head>
 
-    <script type="module">
-      import { Hooked, useEffect, useState } from "/lib/hooks.js";
+<body>
+  <div id="root"></div>
+  <script>
+    const { h, render, Component } = nanoJSX;
+    const root = () => document.getElementById("root");
+  </script>
 
-      describe("useEffect cleanup", async () => {
-        function Comp() {
-          const [count, setCount] = useState(0);
-          const [clean, setClean] = useState("no");
-          useEffect(() => {
-            let status = false;
+  <script type="module">
+    import { Hooked, useEffect, useState } from "/lib/hooks.js";
 
-            // asuming abort controller 1s
-            setTimeout(() => {
-              if (status) {
-                setClean("yes");
-              }
-            }, 1000);
-            return () => {
-              status = true;
-            };
-          }, [count]);
-          return h(
-            "div",
-            null,
-            h(
-              "button",
-              {
-                onClick: () => setCount((p) => p + 1),
-              },
-              "Click Me"
-            ),
-            h("span", null, clean)
-          );
-        }
+    describe("useEffect cleanup", async () => {
+      function Comp() {
+        const [count, setCount] = useState(0);
+        const [clean, setClean] = useState("no");
+        useEffect(() => {
+          let status = false;
 
-        Hooked.bind(render)(Comp, root());
+          // asuming abort controller 1s
+          setTimeout(() => {
+            if (status) {
+              setClean("yes");
+            }
+          }, 1000);
+          return () => {
+            status = true;
+          };
+        }, [count]);
+        return h("div", null, h("button", {
+          onClick: () => setCount((p) => p + 1)
+        }, "Click Me"), h("span", null, clean));
+      }
 
-        const sleep = () => new Promise((resolve) => setTimeout(resolve, 1000));
+      Hooked.bind(render)(Comp, root());
 
+      const sleep = () => new Promise((resolve) => setTimeout(resolve, 1000));
+
+      await Test.wait();
+
+      const click = async () => {
+        const btn = document.querySelector("button");
+        btn.click();
         await Test.wait();
+      };
 
-        const click = async () => {
-          const btn = document.querySelector("button");
-          btn.click();
-          await Test.wait();
-        };
+      await click();
+      await click();
+      await sleep();
+      const span = document.querySelector("span");
+      expect(span.innerText).toBe("yes", "After cleanup 1s, clean should be yes");
+    });
 
-        await click();
-        await click();
-        await sleep();
-        const span = document.querySelector("span");
-        expect(span.innerText).toBe(
-          "yes",
-          "After cleanup 1s, clean should be yes"
-        );
-      });
+    Test.start();
+  </script>
+</body>
 
-      Test.start();
-    </script>
-  </body>
 </html>

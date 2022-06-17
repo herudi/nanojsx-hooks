@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="/tester.js"></script>
+    <script src="/browserTest/tester.js"></script>
+    <script src="/lib/nanojsx.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      const { h, render, Component } = nanoJSX;
+      const root = () => document.getElementById("root");
+    </script>
+
+    <script type="module">
+      import { Hooked, useEffect, useMemo } from "/lib/hooks.js";
+
+      let effectStatus = false, memo = "";
+
+      describe("Non element", async () => {
+        function Comp() {
+
+          memo = useMemo(() => "hello", []);
+
+          useEffect(() => {
+            effectStatus = true;
+          }, []);
+
+          return h("div", null, null);
+        }
+
+        Hooked.bind(render)(Comp);
+
+        await Test.wait();
+
+        expect(effectStatus).toBe(false, "Effect status should be false");
+
+        expect(memo).toBe("hello", "memo should be hello");
+      });
+
+      Test.start();
+    </script>
+  </body>
+</html>

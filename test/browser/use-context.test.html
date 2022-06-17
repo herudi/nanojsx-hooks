@@ -1,64 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <script src="/tester.js"></script>
-    <script src="/browserTest/tester.js"></script>
-    <script src="/lib/nanojsx.min.js"></script>
-  </head>
 
-  <body>
-    <div id="root"></div>
-    <script>
-      const { h, render, Component } = nanoJSX;
-      const root = () => document.getElementById("root");
-    </script>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <script src="/tester.js"></script>
+  <script src="/browserTest/tester.js"></script>
+  <script src="/lib/nanojsx.min.js"></script>
+</head>
 
-    <script type="module">
-      import { Hooked, createContext, useContext } from "/lib/hooks.js";
+<body>
+  <div id="root"></div>
+  <script>
+    const { h, render, Component } = nanoJSX;
+    const root = () => document.getElementById("root");
+  </script>
 
-      describe("createContext and useContext", async () => {
-        const UserCtx = createContext("john");
-        const ThemeCtx = createContext();
-        function Comp() {
-          const user = useContext(UserCtx);
-          const theme = useContext(ThemeCtx);
-          return h(
-            "h1",
-            {
-              style: theme,
-            },
-            user
-          );
-        }
-        function App() {
-          return h(
-            UserCtx.Provider,
-            null,
-            h(
-              ThemeCtx.Provider,
-              {
-                value: { color: "red" },
-              },
-              h(Comp, null)
-            )
-          );
-        }
+  <script type="module">
+    import { Hooked, createContext, useContext } from "/lib/hooks.js";
 
-        Hooked.bind(render)(App, root());
+    describe("createContext and useContext", async () => {
+      const UserCtx = createContext("john");
+      const ThemeCtx = createContext();
+      function Comp() {
+        const user = useContext(UserCtx);
+        const theme = useContext(ThemeCtx);
+        return h("h1", {
+          style: theme
+        }, user);
+      }
+      function App() {
+        return h(UserCtx.Provider, null, h(ThemeCtx.Provider, {
+          value: { color: "red" }
+        }, h(Comp, null)));
+      }
 
-        await Test.wait();
+      Hooked.bind(render)(App, root());
 
-        const h1 = document.querySelector("h1");
+      await Test.wait();
 
-        expect(h1.innerText).toBe("john", "After render, user should be john");
-        expect(h1.style.color).toBe("red", "After render, color should be red");
-      });
+      const h1 = document.querySelector("h1");
 
-      Test.start();
-    </script>
-  </body>
+      expect(h1.innerText).toBe("john", "After render, user should be john");
+      expect(h1.style.color).toBe("red", "After render, color should be red");
+    });
+
+    Test.start();
+  </script>
+</body>
+
 </html>
