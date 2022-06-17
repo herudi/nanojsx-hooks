@@ -20,7 +20,7 @@ export function Hooked(comp: any, target?: any) {
   hook.mems = [];
   hook._elem = target;
   hook._comp = comp;
-  hook._render(comp, target);
+  return hook._render(comp, target);
 }
 
 function hasChange(id: number, deps?: any[]) {
