@@ -11,7 +11,8 @@ function _render(component: any) {
 
 export function Hooked(comp: any, target?: any) {
   // @ts-ignore
-  if (this) hook._render = this;
+  // render aka this is required.
+  hook._render = this;
   hook.id = 0;
   hook.states = [];
   hook.ctx = [];
@@ -105,7 +106,7 @@ export const createContext = (init?: any) => {
   hook.id++;
   return {
     Provider({ value, children }: any) {
-      hook.ctx[id] = value || init || {};
+      hook.ctx[id] = value || init;
       return children;
     },
     v: () => hook.ctx[id],
