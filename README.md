@@ -15,10 +15,13 @@ Experimental hooks with [nanojsx](https://nanojsx.io).
 - useContext
 
 ## Install
+
 ```bash
 npm i nanojsx-hooks
 ```
+
 ## Usage
+
 ```jsx
 /** @jsx h */
 import { h, render } from "nano-jsx";
@@ -34,7 +37,7 @@ function Counter() {
     // log
     console.log(count);
   }, [count]);
-  
+
   return (
     <div>
       <button
@@ -54,7 +57,6 @@ Hooked.bind(render)(Counter, document.getElementById("app"));
 // ssr
 // const str = Hooked.bind(renderSSR)(Counter);
 // console.log(str)
-
 ```
 
 ## Example Usage

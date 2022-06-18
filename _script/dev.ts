@@ -9,8 +9,7 @@ try {
     outfile: "./public/bundle.js",
     format: "iife",
     banner: {
-      js:
-        ' (() => new EventSource("/_dev").onmessage = () => location.reload())();',
+      js: ' (() => new EventSource("/_dev").onmessage = () => location.reload())();',
     },
     watch: {
       onRebuild(error) {
@@ -23,28 +22,31 @@ try {
     },
     plugins: [denoPlugin()],
   });
-  serve(async (request) => {
-    const { pathname } = new URL(request.url);
-    if (pathname === "/_dev") {
-      const response = new ReadableStream({
-        start(controller) {
-          clients.push(controller);
-        },
-        cancel() {
-          console.log("canceled");
-        },
-      }).pipeThrough(new TextEncoderStream());
-      return new Response(response, {
-        headers: {
-          "Content-Type": "text/event-stream",
-        },
-      });
-    }
-    return await serveFile(
-      request,
-      "./public" + (pathname === "/" ? "/index.html" : pathname),
-    );
-  }, { port: 8080 });
+  serve(
+    async (request) => {
+      const { pathname } = new URL(request.url);
+      if (pathname === "/_dev") {
+        const response = new ReadableStream({
+          start(controller) {
+            clients.push(controller);
+          },
+          cancel() {
+            console.log("canceled");
+          },
+        }).pipeThrough(new TextEncoderStream());
+        return new Response(response, {
+          headers: {
+            "Content-Type": "text/event-stream",
+          },
+        });
+      }
+      return await serveFile(
+        request,
+        "./public" + (pathname === "/" ? "/index.html" : pathname)
+      );
+    },
+    { port: 8080 }
+  );
   setTimeout(() => {
     const open = {
       darwin: ["open"],

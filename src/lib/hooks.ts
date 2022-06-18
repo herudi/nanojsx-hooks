@@ -25,9 +25,8 @@ export function Hooked(comp: any, target?: any) {
 
 function hasChange(id: number, deps?: any[]) {
   const cur = hook.states[id];
-  const cc = cur && deps
-    ? deps.some((dep, x) => !Object.is(dep, cur[x]))
-    : true;
+  const cc =
+    cur && deps ? deps.some((dep, x) => !Object.is(dep, cur[x])) : true;
   hook.states[id] = deps;
   return cc;
 }
@@ -40,9 +39,8 @@ export function useState<T>(val: T): [T, State<T>] {
   return [
     def,
     (newVal) => {
-      hook.states[id] = typeof newVal === "function"
-        ? (newVal as Function)(def)
-        : newVal;
+      hook.states[id] =
+        typeof newVal === "function" ? (newVal as Function)(def) : newVal;
       _render(hook._comp);
     },
   ];
@@ -70,10 +68,10 @@ export function useEffect(cb: CallableFunction, deps?: any[]) {
 export function useReducer<S, A>(
   reducer: Reducer<S, A>,
   initState: S,
-  initLazy?: (initState: S) => any,
+  initLazy?: (initState: S) => any
 ): [S, (action: A) => void] {
   const arr = useState(
-    initLazy !== undefined ? initLazy(initState) : initState,
+    initLazy !== undefined ? initLazy(initState) : initState
   );
   return [
     arr[0],
