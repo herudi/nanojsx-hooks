@@ -2,6 +2,8 @@
 
 Experimental hooks with [nanojsx](https://nanojsx.io).
 
+[![](https://img.shields.io/badge/available%20on-npmjs.com-lightgrey.svg?logo=node.js&logoColor=339933&labelColor=white)](https://www.npmjs.com/package/nanojsx-hooks) [![](https://img.shields.io/badge/available%20on-deno.land/x-lightgrey.svg?logo=deno&labelColor=black)](https://deno.land/x/nanojsx_hooks)
+
 [![codecov](https://codecov.io/gh/herudi/nanojsx-hooks/branch/master/graph/badge.svg)](https://codecov.io/gh/herudi/nanojsx-hooks)
 
 ## Hooks
