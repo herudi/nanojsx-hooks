@@ -6,7 +6,8 @@
   "type": "module",
   "types": "lib/hooks.d.ts",
   "scripts": {
-    "build": "tsc -p tsconfig.nodejs.json"
+    "build": "tsc -p tsconfig.nodejs.json",
+    "fmt": "npx -y prettier --write _script public src test mod.ts README.md"
   },
   "files": [
     "lib/*"
